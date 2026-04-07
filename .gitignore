@@ -1,0 +1,9 @@
+# Ignorar carpetas de configuración
+.agent/
+.vscode/
+
+# Otros archivos locales
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
