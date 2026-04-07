@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flete Express Kangoo | Monterrey Sur y San Pedro</title>
+    <!-- Fuentes Modernas -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003366; /* Azul Navy Premium */
+            --secondary: #FF6600; /* Naranja Seguridad */
+            --text-dark: #1A1A1A;
+            --text-light: #F4F7F9;
+            --white: #ffffff;
+            --gray: #ECEFF1;
+            --success: #25D366; /* Verde WhatsApp Brillante */
+            --pay-blue: #009ee3; /* Azul Mercado Pago */
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--gray); color: var(--text-dark); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; margin: 0; }
+
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .promo-banner { background: var(--secondary); color: white; text-align: center; padding: 10px; font-weight: 800; font-size: 14px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        header { 
+            position: relative;
+            background: url('fletes_san_pedro_premium.png') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white); 
+            text-align: center; 
+            padding: 40px 20px;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 51, 102, 0.4), rgba(0, 31, 63, 0.7));
+            z-index: 1;
+        }
+
+        header * { position: relative; z-index: 2; }
+
+        .badge { 
+            background: var(--secondary); color: white; padding: 8px 20px; border-radius: 50px; font-weight: 800; font-size: 14px; margin-bottom: 25px; display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.6); animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 102, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+        }
+
+        header h1 { font-size: 3.5rem; line-height: 1; margin-bottom: 20px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); max-width: 800px;}
+        header p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px; opacity: 0.9; }
+
+        .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { background: var(--secondary); color: white; padding: 18px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 16px; transition: 0.3s; box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3); }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; padding: 16px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 16px; transition: 0.3s; }
+        .btn-primary:hover, .btn-outline:hover { transform: translateY(-3px); }
+
+        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } header { min-height: 80vh; } }
+
+        main { max-width: 600px; margin: -40px auto 40px; padding: 20px; position: relative; z-index: 10; }
+        section { background: var(--white); border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+
+        h2 { font-size: 20px; color: var(--primary); border-left: 4px solid var(--secondary); padding-left: 15px; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #555; }
+        select, input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 20px; background-color: #fafafa; transition: border-color 0.3s; }
+        select:focus, input:focus { border-color: var(--primary); outline: none; background: #fff; }
+
+        /* Errore de Validación: Shake */
+        .input-error { border-color: #ff5252 !important; animation: shake 0.4s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        .price-badge { background: #f0f4f8; padding: 25px; border-radius: 15px; text-align: center; border: 2px dashed var(--primary); position: relative; }
+        .price-old { font-size: 16px; color: #888; text-decoration: line-through; margin-bottom: 5px; }
+        .price-label { font-size: 12px; font-weight: bold; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .price-value { font-size: 40px; color: var(--primary); font-family: 'Montserrat', sans-serif; font-weight: 800; display: inline-block; }
+        .price-note { font-size: 12px; color: #777; margin-top: 10px; }
+
+        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .time-slot { border: 1px solid #ddd; padding: 10px; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; }
+        .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Botón WhatsApp Brillante Permanente */
+        .btn-reserve { 
+            display: block; width: 100%; background: #25D366 !important; color: white !important; 
+            text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; 
+            font-weight: 800; font-size: 18px; box-shadow: 0 10px 25px rgba(37,211,102,0.5); 
+            transition: 0.3s; margin-top: 20px; opacity: 1 !important; cursor: pointer; border: none;
+        }
+        .btn-reserve:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(37,211,102,0.7); filter: brightness(1.1); }
+
+        .info-box { background: #fff8e1; border-left: 4px solid #ffca28; padding: 15px; margin-bottom: 20px; font-size: 13px; color: #5d4037; }
+        footer { text-align: center; padding: 20px; font-size: 12px; color: #aaa; }
+
+        /* MODAL DE PAGO */
+        #payment-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 30px; position: relative; text-align: center; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #aaa; }
+        .payment-option { border: 2px solid var(--gray); padding: 15px; border-radius: 15px; margin-bottom: 15px; transition: 0.3s; text-align: left; position: relative; text-decoration: none; color: inherit; display: block; }
+        .payment-option:hover { border-color: var(--pay-blue); background: #f0faff; }
+        .payment-title { font-weight: 800; color: var(--primary); font-size: 16px; margin-bottom: 5px; display: block;}
+        .payment-subtitle { font-size: 12px; color: #666; }
+        .banregio-badge { background: #ef5350; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; }
+        .legal-notice { font-size: 10px; color: #777; margin-top: 15px; text-align: left; background: #fdf2f2; padding: 10px; border-radius: 8px; border: 1px solid #fee2e2; }
+        .btn-done { background: var(--success); color: white; width: 100%; display: block; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 800; margin-top: 15px; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+
+        #km-container { display: none; background: #fffde7; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #fbc02d; }
+    </style>
+</head>
+<body>
+
+<div id="payment-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h2 style="border-left: none; padding-left: 0;">Reserva tu Flete</h2>
+        <p style="font-size: 14px; margin-bottom: 25px;">Para asegurar tu fecha, por favor realiza el pago del anticipo de **$200 MXN**.</p>
+        
+        <a href="https://link.mercadopago.com.mx/tu-link-aqui" target="_blank" class="payment-option">
+            <span class="payment-title">Pago con Tarjeta / OXXO</span>
+            <span class="payment-subtitle">Aceptamos todas las tarjetas vía Mercado Pago.</span>
+        </a>
+
+        <div class="payment-option" style="cursor: default; border: 2px solid #f0f0f0;">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span class="payment-title" style="margin-bottom:0;">Transferencia / Depósito</span>
+                <span class="banregio-badge">Banregio / Enlace</span>
+            </div>
+            <span class="payment-subtitle">Cuenta: **059968440017**<br>Titular: **Cindy Aime Alonso Garza**</span>
+        </div>
+
+        <div class="legal-notice">
+            🔒 **Póliza de Servicio:** Al realizar su pago de **$200 MXN**, usted acepta que:
+            - **NO HAY REEMBOLSO** en caso de cancelación por parte del cliente.
+            - El **saldo restante** debe liquidarse al terminar el flete y **ANTES de descargar** la mercancía en el domicilio.
+            - Nos reservamos el derecho de retención de carga en caso de falta de pago total.
+        </div>
+
+        <a href="#" id="final-wa-btn" class="btn-done">YA HICE MI PAGO -> CONFIRMAR</a>
+        <p style="font-size: 10px; margin-top: 10px; color: #888;">Al dar clic, enviarás tu cotización completa a nuestro equipo.</p>
+    </div>
+</div>
+
+<div class="promo-banner">🎁 ¡SEMANA DE LANZAMIENTO! -15% DE DESCUENTO YA APLICADO</div>
+
+<header class="fade-in">
+    <div class="badge">CON ANTICIPO DE $200 MXN</div>
+    <h1>MUDANZAS Y FLETES EN MONTERREY</h1>
+    <p>Servicio Premium en Monterrey Sur y San Pedro Garza García. <br>Rapidez y seguridad en unidad cerrada.</p>
+    
+    <div class="hero-btns">
+        <a href="#cotizador" class="btn-primary">Cotizar Ahora</a>
+        <a href="https://wa.me/528111835907" class="btn-outline">WhatsApp Directo</a>
+    </div>
+</header>
+
+<main class="fade-in">
+    <section id="cotizador">
+        <h2>1. Detalle del Flete</h2>
+
+        <label for="nombre-solicitante">👤 Nombre de quien solicita</label>
+        <input type="text" id="nombre-solicitante" placeholder="Tu nombre completo" oninput="updatePrice()">
+        
+        <h3 style="font-size: 16px; color: var(--secondary); margin-bottom: 15px;">A. Punto de Recolección (Origen)</h3>
+
+        <label for="sector-origen">🚩 Sector de Origen</label>
+        <select id="sector-origen" onchange="initDatalist('origen')">
+            <option value="">Selecciona Sector de origen...</option>
+            <option value="Zona Sur">Monterrey Sur</option>
+            <option value="San Pedro">San Pedro Garza García</option>
+            <option value="Cumbres / Poniente">Cumbres / San Jerónimo</option>
+            <option value="Guadalupe">Guadalupe / La Silla</option>
+            <option value="Apodaca / Escobedo">Apodaca / San Nicolás / Escobedo</option>
+            <option value="Santa Catarina">Santa Catarina / La Huasteca</option>
+        </select>
+
+        <label for="colonia-origen-input">🏠 Colonia de Origen</label>
+        <input list="colonia-origen-list" id="colonia-origen-input" placeholder="Ej: Contry, Del Valle..." oninput="checkColonia('origen')" onclick="this.value=''; updatePrice();">
+        <datalist id="colonia-origen-list"></datalist>
+
+        <div id="km-container-origen" style="display:none; background: #fffde7; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fbc02d;">
+            <label>📍 Origen: Colonia Nueva detectada</label>
+            <input type="number" id="km-manual-origen" value="10" oninput="updatePrice()">
+        </div>
+
+        <label for="direccion-origen">📍 Calle y Número Origen</label>
+        <input type="text" id="direccion-origen" placeholder="Ej: Calle Bosques #456" oninput="updatePrice()">
+
+        <h3 style="font-size: 16px; color: var(--secondary); margin-top: 20px; margin-bottom: 15px;">B. Punto de Entrega (Destino)</h3>
+
+        <label for="sector">📍 Sector de Entrega</label>
+        <select id="sector" onchange="initDatalist('destino')">
+            <option value="">Selecciona Sector de entrega...</option>
+            <option value="Zona Sur">Monterrey Sur</option>
+            <option value="San Pedro">San Pedro Garza García</option>
+            <option value="Cumbres / Poniente">Cumbres / San Jerónimo</option>
+            <option value="Guadalupe">Guadalupe / La Silla</option>
+            <option value="Apodaca / Escobedo">Apodaca / San Nicolás / Escobedo</option>
+            <option value="Santa Catarina">Santa Catarina / La Huasteca</option>
+        </select>
+
+        <label for="colonia-input">🏡 Colonia de Entrega</label>
+        <input list="colonia-list" id="colonia-input" placeholder="Ej: Contry, Del Valle..." oninput="checkColonia('destino')" onclick="this.value=''; updatePrice();">
+        <datalist id="colonia-list"></datalist>
+
+        <div id="km-container">
+            <label>📍 Destino: Colonia Nueva detectada</label>
+            <p style="font-size: 13px; color: #555; margin-bottom: 10px;">Dinos los KM estimados para cotizarte mejor.</p>
+            <input type="number" id="km-manual" value="10" oninput="updatePrice()">
+        </div>
+
+        <label for="direccion-exacta">📍 Calle y Número Destino</label>
+        <input type="text" id="direccion-exacta" placeholder="Ej: Av. Garza Sada #123" oninput="updatePrice()">
+
+        <label for="tipo-carga">📦 ¿Qué vas a trasladar?</label>
+        <select id="tipo-carga" onchange="updatePrice()">
+            <option value="0">Solo Cajas / Bolsas / Cosas Pequeñas ($0)</option>
+            <option value="350">Línea Blanca (Refri, Estufa, Lavadora) (+$350)</option>
+            <option value="550">Mudanza Ligera (Cajas + 2 muebles grandes) (+$550)</option>
+            <option value="850">Carga Completa Kangoo (+$850)</option>
+        </select>
+
+        <label for="vueltas">🔄 Número de Vueltas</label>
+        <select id="vueltas" onchange="updatePrice()">
+            <option value="1">1 Vuelta</option>
+            <option value="2">2 Vueltas (Ahorro en la 2da!)</option>
+        </select>
+
+        <label for="pisos">🏢 Piso de Entrega (Escaleras)</label>
+        <select id="pisos" onchange="updatePrice()">
+            <option value="0">Planta Baja ($0)</option>
+            <option value="150">1er Piso (+$150)</option>
+            <option value="300">2do Piso (+$300)</option>
+            <option value="450">3er Piso (+$450)</option>
+        </select>
+
+        <div class="price-badge">
+            <div class="price-old" id="old-price">$0.00</div>
+            <div class="price-label">PRECIO CON DESCUENTO SEMANAL</div>
+            <div class="price-value" id="final-price">$550.00</div>
+            <div class="price-note">Incluye combustible y maniobra básica.</div>
+        </div>
+
+        <div class="info-box" style="margin-top:20px;">⚠️ **Seguridad**: Solo respondemos vía WhatsApp Business. No respondemos llamadas desconocidas.</div>
+        <button class="btn-reserve" onclick="handleReserve()">AGENDAR Y RESERVAR POR WHATSAPP</button>
+    </section>
+
+    <!-- Agenda -->
+    <section>
+        <h2>2. Selecciona Fecha y Hora</h2>
+        <label>📅 Fecha</label>
+        <input type="date" id="date" onchange="updatePrice()">
+        <label>⏰ Horarios Disponibles</label>
+        <div class="time-grid" id="time-grid"></div>
+        <input type="hidden" id="selected-time" value="">
+    </section>
+</main>
+
+<footer>&copy; 2025 Flete Express Monterrey. Servicio Premium especializado.</footer>
+
+<script>
+    const colData = {
+        "Zona Sur": { "Contry": 4, "Satélite": 7, "Las Brisas": 5, "Valle Alto": 18, "La Rioja": 17, "El Uro": 20, "Sierra Alta": 19, "Estanzuela": 15, "Roma": 3, "Tecnológico": 2, "Altavista": 2, "Primavera": 4, "Lagos del Bosque": 8 },
+        "San Pedro": { "Del Valle": 10, "Valle Oriente": 6, "Centrito Valle": 12, "San Agustín": 8, "Chipinque": 14, "Fuentes del Valle": 9 },
+        "Cumbres / Poniente": { "Cumbres 1-5": 11, "Cumbres Elite": 16, "Puerta de Hierro": 19, "San Jerónimo": 9, "Mitras": 8, "Vista Hermosa": 8, "Chepevera": 7 },
+        "Guadalupe": { "Linda Vista": 10, "Contry Sol": 8, "Contry La Silla": 9, "San Rafael": 12 },
+        "Apodaca / Escobedo": { "Anáhuac": 11, "Las Puentes": 13, "Apodaca Centro": 22, "Rinconada Colonial": 25 },
+        "Santa Catarina": { "Vía Cordillera": 12, "La Huasteca": 18, "Cumbres Sta Catarina": 20 }
+    };
+
+    const slots = ["09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
+    let selectedTime = null;
+
+    function initDatalist(type) {
+        const sectorId = type === 'origen' ? 'sector-origen' : 'sector';
+        const listId = type === 'origen' ? 'colonia-origen-list' : 'colonia-list';
+        const inputId = type === 'origen' ? 'colonia-origen-input' : 'colonia-input';
+        
+        const sector = document.getElementById(sectorId).value;
+        const list = document.getElementById(listId);
+        const colInput = document.getElementById(inputId);
+        
+        colInput.value = '';
+        list.innerHTML = '';
+        if (colData[sector]) {
+            Object.keys(colData[sector]).sort().forEach(col => {
+                const opt = document.createElement('option');
+                opt.value = col;
+                list.appendChild(opt);
+            });
+        }
+        updatePrice();
+    }
+
+    function checkColonia(type) {
+        const sectorId = type === 'origen' ? 'sector-origen' : 'sector';
+        const inputId = type === 'origen' ? 'colonia-origen-input' : 'colonia-input';
+        const containerId = type === 'origen' ? 'km-container-origen' : 'km-container';
+        
+        const sector = document.getElementById(sectorId).value;
+        const colInput = document.getElementById(inputId).value;
+        const container = document.getElementById(containerId);
+        
+        if (colInput && sector && colData[sector] && !colData[sector][colInput]) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+        updatePrice();
+    }
+
+    function updatePrice() {
+        const sectorO = document.getElementById('sector-origen').value;
+        const colO = document.getElementById('colonia-origen-input').value;
+        const sectorD = document.getElementById('sector').value;
+        const colD = document.getElementById('colonia-input').value;
+
+        let kmO = 0;
+        if (sectorO && colData[sectorO] && colData[sectorO][colO]) {
+            kmO = colData[sectorO][colO];
+        } else if (document.getElementById('km-manual-origen')) {
+            kmO = parseInt(document.getElementById('km-manual-origen').value) || 0;
+        }
+
+        let kmD = 0;
+        if (sectorD && colData[sectorD] && colData[sectorD][colD]) {
+            kmD = colData[sectorD][colD];
+        } else {
+            kmD = parseInt(document.getElementById('km-manual').value) || 0;
+        }
+
+        // Cálculo de KM totales (Aproximación radial Origen -> Base -> Destino con descuento por cercanía)
+        let totalKm = kmO + kmD;
+        if (sectorO === sectorD && sectorO !== "") {
+            totalKm = totalKm * 0.7; // Descuento del 30% si están en el mismo sector
+        }
+
+        const tipoCarga = parseInt(document.getElementById('tipo-carga').value);
+        const pisos = parseInt(document.getElementById('pisos').value);
+        const numVueltas = parseInt(document.getElementById('vueltas').value);
+
+        // Costo combustible: 2 idas y vueltas (2x ida y vuelta) / rendimiento * precio litro
+        // O más simple: KM totales * factor
+        const fuelCost = (totalKm * 2 / 12) * 30;
+        const laborBase = 500; 
+        
+        let subtotal = fuelCost + laborBase + tipoCarga + pisos;
+        if (numVueltas === 2) subtotal = subtotal * 1.8;
+
+        const finalPrice = Math.max(550, Math.round(subtotal * 1.30)); 
+        const originalPriceDisplay = Math.round(finalPrice / 0.85); 
+
+        document.getElementById('final-price').innerText = '$' + finalPrice.toLocaleString() + '.00';
+        document.getElementById('old-price').innerText = 'Antes: $' + originalPriceDisplay.toLocaleString() + '.00';
+        
+        return finalPrice;
+    }
+
+    function handleReserve() {
+        const nombre = document.getElementById('nombre-solicitante').value;
+        const sector = document.getElementById('sector').value;
+        const colInput = document.getElementById('colonia-input').value;
+        const direccion = document.getElementById('direccion-exacta').value;
+        const date = document.getElementById('date').value;
+        
+        let valid = true;
+        [document.getElementById('nombre-solicitante'), document.getElementById('sector'), document.getElementById('colonia-input'), document.getElementById('direccion-exacta'), document.getElementById('date')].forEach(el => {
+            if(!el.value) { el.classList.add('input-error'); valid = false; } else { el.classList.remove('input-error'); }
+        });
+
+        if(!selectedTime) { alert('Por favor selecciona una hora de entrega.'); valid = false; }
+
+        if (valid) {
+            document.getElementById('payment-modal').style.display = 'flex';
+            updateFinalLink();
+        } else {
+            alert('Por favor completa todos los datos destacados en rojo.');
+        }
+    }
+
+    function closeModal() { document.getElementById('payment-modal').style.display = 'none'; }
+
+    function updateFinalLink() {
+        const total = updatePrice();
+        const nombre = document.getElementById('nombre-solicitante').value;
+        const date = document.getElementById('date').value;
+        const time = selectedTime;
+        
+        const sectorO = document.getElementById('sector-origen').value;
+        const colO = document.getElementById('colonia-origen-input').value;
+        const dirO = document.getElementById('direccion-origen').value;
+
+        const sectorD = document.getElementById('sector').value;
+        const colD = document.getElementById('colonia-input').value;
+        const dirD = document.getElementById('direccion-exacta').value;
+        
+        const message = `¡Hola! Soy ${nombre}. Ya hice mi pago del anticipo de $200:\n\n` +
+                        `🚩 ORIGEN: ${dirO}, ${colO} (${sectorO})\n` +
+                        `📍 DESTINO: ${dirD}, ${colD} (${sectorD})\n` +
+                        `📅 FECHA: ${date} - ⏰ HORA: ${time}\n\n` +
+                        `💰 COTIZACIÓN: $${total}.00 MXN\n` +
+                        `Adjunto el comprobante.`;
+
+        document.getElementById('final-wa-btn').href = `https://wa.me/528111835907?text=${encodeURIComponent(message)}`;
+    }
+
+    function initTimeSlots() {
+        const grid = document.getElementById('time-grid'); grid.innerHTML = '';
+        slots.forEach(time => {
+            const div = document.createElement('div'); div.className = 'time-slot'; div.innerText = time;
+            div.onclick = () => {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                div.classList.add('selected'); selectedTime = time; updatePrice();
+            };
+            grid.appendChild(div);
+        });
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    }
+    window.onload = () => { initTimeSlots(); updatePrice(); };
+    window.onclick = function(event) { if (event.target == document.getElementById('payment-modal')) closeModal(); }
+</script>
+</body>
+</html>
